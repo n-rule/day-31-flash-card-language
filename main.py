@@ -5,7 +5,6 @@ from pandas import *
 
 data_full = read_csv('./data/ukrainian_words.csv')
 
-en_word = ''
 chosen_card = {}
 
 # Creating new Document if it not exist
@@ -34,7 +33,7 @@ def wrong_click():
 def flip_card():
     canvas.itemconfig(canvas_image, image=card_back)
     canvas.itemconfig(language_text, text='English')
-    global en_word, chosen_card
+    global chosen_card
     en_word = chosen_card['English']
     canvas.itemconfig(word_text, text=en_word)
 
@@ -42,7 +41,7 @@ def flip_card():
 # ---------------------------------- Generate Card -----------------------------------
 
 def generate_card():
-    global en_word, flip_timer, chosen_card
+    global flip_timer, chosen_card
     chosen_card = choice(data_records)
     ua_word = chosen_card['Ukrainian']
     window.after_cancel(flip_timer)
