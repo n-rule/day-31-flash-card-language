@@ -1,6 +1,7 @@
-from pandas import *
+from random import choice
 from tkinter import *
-from random import randint, choice
+
+from pandas import *
 
 data_full = read_csv('./data/ukrainian_words.csv')
 
@@ -14,7 +15,7 @@ except FileNotFoundError:
     data_full.to_csv('./data/words_to_learn.csv', index=False)
     data = read_csv('./data/words_to_learn.csv')
 
-data_records = data_full.to_dict(orient='records')
+data_records = data.to_dict(orient='records')
 
 
 def right_click():
