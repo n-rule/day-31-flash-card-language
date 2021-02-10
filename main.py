@@ -1,5 +1,15 @@
-
+from pandas import *
 from tkinter import *
+
+
+
+
+
+
+# ---------------------------------- Generate Card -----------------------------------
+
+def generate_card():
+
 
 # ---------------------------- UI SETUP -----------------------------
 
@@ -13,8 +23,8 @@ card_front = PhotoImage(file='./images/card_front.png')
 card_back = PhotoImage(file='./images/card_back.png')
 
 canvas.create_image(400, 260, image=card_front)
-language_text = canvas.create_text(400, 150, text='Ukrainian', font=('Gubbi', 40, 'italic'))
-word_text = canvas.create_text(400, 300, text='Срака-Мотика', font=('Gubbi', 60, 'bold'))
+language_text = canvas.create_text(400, 150, text='Ukrainian', font=('Yrsa', 40, 'italic'))
+word_text = canvas.create_text(400, 300, text='Срака-Мотика', font=('Yrsa', 60, 'bold'))
 canvas.grid(column='0', row='0', columnspan='2')
 
 image_right = PhotoImage(file='./images/right.png')
@@ -26,4 +36,5 @@ button_wrong = Button(image=image_wrong)
 button_wrong.grid(column='0', row='1')
 
 window.mainloop()
+
 
