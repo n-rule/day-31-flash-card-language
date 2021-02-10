@@ -5,6 +5,9 @@ from random import randint, choice
 data_full = read_csv('./data/ukrainian_words.csv')
 
 en_word = ''
+chosen_card = {}
+
+# Creating new Document if it not exist
 try:
     data = read_csv('./data/words_to_learn.csv')
 except FileNotFoundError:
@@ -13,7 +16,11 @@ except FileNotFoundError:
 
 data_records = data_full.to_dict(orient='records')
 
+
 def right_click():
+    data_records.remove(chosen_card)
+    data_to_learn = DataFrame(data_records)
+    data_to_learn.to_csv('./data/words_to_learn.csv', index=False)
     generate_card()
 
 
@@ -26,25 +33,22 @@ def wrong_click():
 def flip_card():
     canvas.itemconfig(canvas_image, image=card_back)
     canvas.itemconfig(language_text, text='English')
-    global en_word
+    global en_word, chosen_card
+    en_word = chosen_card['English']
     canvas.itemconfig(word_text, text=en_word)
 
 
 # ---------------------------------- Generate Card -----------------------------------
 
 def generate_card():
-
-    word = choice(data_records)
-    ua_word = word['Ukrainian']
-    global en_word, flip_timer
+    global en_word, flip_timer, chosen_card
+    chosen_card = choice(data_records)
+    ua_word = chosen_card['Ukrainian']
     window.after_cancel(flip_timer)
     flip_timer = window.after(3000, func=flip_card)
-    en_word = word['English']
     canvas.itemconfig(language_text, text='Ukrainian')
     canvas.itemconfig(word_text, text=ua_word)
     canvas.itemconfig(canvas_image, image=card_front)
-
-
 
 
 # ---------------------------- UI SETUP -----------------------------
