@@ -2,10 +2,16 @@ from pandas import *
 from tkinter import *
 from random import randint, choice
 
-data = read_csv('./data/ukrainian_words.csv')
-data_records = data.to_dict(orient='records')
-en_word = ''
+data_full = read_csv('./data/ukrainian_words.csv')
 
+en_word = ''
+try:
+    data = read_csv('./data/words_to_learn.csv')
+except FileNotFoundError:
+    data_full.to_csv('./data/words_to_learn.csv', index=False)
+    data = read_csv('./data/words_to_learn.csv')
+
+data_records = data_full.to_dict(orient='records')
 
 def right_click():
     generate_card()
@@ -27,14 +33,18 @@ def flip_card():
 # ---------------------------------- Generate Card -----------------------------------
 
 def generate_card():
+
     word = choice(data_records)
     ua_word = word['Ukrainian']
-    global en_word
+    global en_word, flip_timer
+    window.after_cancel(flip_timer)
+    flip_timer = window.after(3000, func=flip_card)
     en_word = word['English']
     canvas.itemconfig(language_text, text='Ukrainian')
     canvas.itemconfig(word_text, text=ua_word)
     canvas.itemconfig(canvas_image, image=card_front)
-    window.after(3000, func=flip_card)
+
+
 
 
 # ---------------------------- UI SETUP -----------------------------
@@ -43,6 +53,8 @@ BACKGROUND_COLOR = "#B1DDC6"
 window = Tk()
 window.title('Flashy Cards')
 window.config(padx=50, pady=50, bg=BACKGROUND_COLOR)
+
+flip_timer = window.after(3000, func=flip_card)
 
 canvas = Canvas(width=800, height=526, bg=BACKGROUND_COLOR, highlightthickness=0)
 card_front = PhotoImage(file='./images/card_front.png')
