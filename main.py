@@ -1,23 +1,40 @@
 from pandas import *
 from tkinter import *
+from random import randint, choice
 
-data = read_csv('ukrainian_words.csv')
-# data = DataFrame.to_dict(orient='records')
+data = read_csv('./data/ukrainian_words.csv')
+data_records = data.to_dict(orient='records')
+en_word = ''
+
 
 def right_click():
-    pass
+    generate_card()
 
 
 def wrong_click():
-    pass
+    generate_card()
 
+
+# ---------------------------------- Flip Card --------------------------------------
+
+def flip_card():
+    canvas.itemconfig(canvas_image, image=card_back)
+    canvas.itemconfig(language_text, text='English')
+    global en_word
+    canvas.itemconfig(word_text, text=en_word)
 
 
 # ---------------------------------- Generate Card -----------------------------------
 
-
 def generate_card():
-    pass
+    word = choice(data_records)
+    ua_word = word['Ukrainian']
+    global en_word
+    en_word = word['English']
+    canvas.itemconfig(language_text, text='Ukrainian')
+    canvas.itemconfig(word_text, text=ua_word)
+    canvas.itemconfig(canvas_image, image=card_front)
+    window.after(3000, func=flip_card)
 
 
 # ---------------------------- UI SETUP -----------------------------
@@ -31,9 +48,10 @@ canvas = Canvas(width=800, height=526, bg=BACKGROUND_COLOR, highlightthickness=0
 card_front = PhotoImage(file='./images/card_front.png')
 card_back = PhotoImage(file='./images/card_back.png')
 
-canvas.create_image(400, 260, image=card_front)
-language_text = canvas.create_text(400, 150, text='Ukrainian', font=('Yrsa', 40, 'italic'))
-word_text = canvas.create_text(400, 300, text='Срака-Мотика', font=('Yrsa', 60, 'bold'))
+canvas_image = canvas.create_image(400, 260, image=card_front)
+
+language_text = canvas.create_text(400, 100, text='Ukrainian', font=('Yrsa', 30, 'italic'))
+word_text = canvas.create_text(400, 280, text='срака-мотика', font=('Yrsa', 100, 'bold'))
 canvas.grid(column='0', row='0', columnspan='2')
 
 image_right = PhotoImage(file='./images/right.png')
@@ -44,6 +62,6 @@ image_wrong = PhotoImage(file='./images/wrong.png')
 button_wrong = Button(image=image_wrong, command=wrong_click)
 button_wrong.grid(column='0', row='1')
 
+generate_card()
+
 window.mainloop()
-
-
